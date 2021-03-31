@@ -1,0 +1,59 @@
+Normalization constant A0:
+4.94106E+07
+Conversion factor [(m/s)/count] = inverse of the veloc_sensitivity:
+4.104939e-10
+zeros (for velocity response)
+2
+0.000000e+00     0.000000e+00
+0.000000e+00     0.000000e+00
+poles
+5
+-3.710000e-02    -3.620000e-02
+-3.710000e-02    3.620000e-02
+-2.513270e+02    0.000000e+00
+-1.186340e+02    4.230650e+02
+-1.186340e+02    -4.230650e+02
+Info:  05-Dec-2013  GTBY  Digi sens  2436090000  Seism sens   1
+
+%% This is ISOLA pz file (response in velocity) based on attached file SAC-PZ.
+
+%% SAC-PZ file gives dates for which response is valid. Caution: File was created
+%%   in 2016-02-04T, so if response has changed after this date, the file is useless 
+%% SAC-PZ is response to input displacement (see * INPUT UNIT        : M)
+%% SAC-PZ gives sensitivity (see * SENSITIVITY       : 2.436090e+09 (M/S)), 
+%%   it is velocity_sensitivity in units [count/(m/s)]
+%% SAC-PZ gives A0 = 4.941760e+07
+%% SAC-PZ gives 3 zeros and 5 poles in [rad/s]
+%%   (although unit [rad/s] is not indicated in SAC-PZ)
+%%
+%% SAC-PZ file, last line, gives also CONSTANT
+%%  where CONSTANT = A0 * veloc_sensitivity, so it is a repeated information 
+
+
+%% ISOLA pz files needs response to velocity, poles and zeros in [rad/s] 
+%% We take A0 and use it in line 2 
+%% For the response to velocity we must remove one zero (hence  only 2), and use 5 poles
+%% On line 4 we need conversion factor, i.e. inverse value of the veloc_sensitivity
+%%   Here = 1./veloc_sens = 1./2.436090e+09 = 4.104939e-10 
+%% If plotted, the response is flat to velocity, the plateau = 1. This is a check of
+%%   correct combination of A0, poles, and zeros, but it does not check the conversion factor 
+
+%% RESP poles/zeros are in rad/s (see B053F03) 
+%% RESP is reponse to velocity (see B053F05), i.e. it gives only 2 zeros and 5 poles
+%% RESP gives A0  (see B053F07) 
+%% RESP gives normalization frequency (see B053F08), f_ref; here we do not need it
+%%	 We would need it if response file gives the acceleration_sensitivity or displacment_sensitivity 
+%%   veloc_sens = acc_sens * 2pi f_ref, and veloc_sens = displ_sens / 2pi f_ref
+%% RESP gives sensitivity (see B058F04 at the end), in this case it is veloc_sensitivity
+
+%% RESP from Seed conversion has advantage because it creates all existing SAC-PZ with possibly 
+%%    different dates (note that RESP has Start date:  2015,048)
+
+%% If response is in [rad/s], there is no need to 'play' with factor of 2pi in zeros, poles, and A0.
+%% If response is in [Hz], then zeros and poles must be multiplied by 2pi, 
+%% and A0 multiplied by (2pi)^(number of poles - number of zeros]. Symbol ^ shows the power, e.g. 3^2=9.
+
+%% Keep in mind that the same response can be described by various combinations of zeros and poles and zeros.
+%% The number of zeros itself does not tell us whether it is response to velocity or displacement.
+
+
