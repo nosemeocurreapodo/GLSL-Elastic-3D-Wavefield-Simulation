@@ -1,0 +1,12 @@
+#input files
+#params file (absolute path)
+#network file (absolute path)
+#model file (absolute path)
+#earthquakes file (absolute path)
+
+params: C:\Emanuel\GLSL-Elastic-3D-Wavefield-Simulation\cuba\params.txt
+network: C:\Emanuel\GLSL-Elastic-3D-Wavefield-Simulation\cuba\network.txt
+model: C:\Emanuel\GLSL-Elastic-3D-Wavefield-Simulation\cuba\model.txt
+earthquake: C:\Emanuel\GLSL-Elastic-3D-Wavefield-Simulation\cuba\earthquakes.txt
+
+

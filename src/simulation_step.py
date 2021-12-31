@@ -6,35 +6,36 @@ from OpenGL.GL import *              # standard Python OpenGL wrapper
 
 import numpy as np                  # all matrix manipulations & OpenGL args
 
-import shaderGeom
+import src.shaderGeom as shaderGeom
+import src.simulation_params as simulation_params
+import src.wavefield_memory as wavefield_memory
+import src.medium_memory as medium_memory
+from src.opengl_helpers import *
 
-import simulation_params
-import simulation_memory
-import medium_params
 
 class simulation_step:
-  def __init__(self, sim_params, sim_memory, medium_params):
+  def __init__(self, sim_params, wavefield_memory):
   
     self.sim_params = sim_params
-    self.sim_memory = sim_memory
-    self.medium_params = medium_params
+    self.wave_memory = wavefield_memory
     
     #init shaders
     self.elasticVelShader = shaderGeom.Shader("shaders/elastic3D.vs","shaders/elastic3D.gs","shaders/elasticVel3D.fs")
     
     glUseProgram(self.elasticVelShader.glid)
     
-    glUniform1i(glGetUniformLocation(self.elasticVelShader.glid, "sigmaxxTex"), 3); 
-    glUniform1i(glGetUniformLocation(self.elasticVelShader.glid, "sigmaxyTex"), 4);
-    glUniform1i(glGetUniformLocation(self.elasticVelShader.glid, "sigmaxzTex"), 5);   
-    glUniform1i(glGetUniformLocation(self.elasticVelShader.glid, "sigmayyTex"), 6); 
-    glUniform1i(glGetUniformLocation(self.elasticVelShader.glid, "sigmayzTex"), 7);
-    glUniform1i(glGetUniformLocation(self.elasticVelShader.glid, "sigmazzTex"), 8);       
-    glUniform1i(glGetUniformLocation(self.elasticVelShader.glid, "invRhoTex"), 9); 
-    glUniform1i(glGetUniformLocation(self.elasticVelShader.glid, "fxTex"), 12); 
-    glUniform1i(glGetUniformLocation(self.elasticVelShader.glid, "fyTex"), 13); 
-    glUniform1i(glGetUniformLocation(self.elasticVelShader.glid, "fzTex"), 14);
-
+    glUniform1i(glGetUniformLocation(self.elasticVelShader.glid, "sigmaxxTex"), sigmaxx_texture_unit_number); 
+    glUniform1i(glGetUniformLocation(self.elasticVelShader.glid, "sigmaxyTex"), sigmaxy_texture_unit_number);
+    glUniform1i(glGetUniformLocation(self.elasticVelShader.glid, "sigmaxzTex"), sigmaxz_texture_unit_number);   
+    glUniform1i(glGetUniformLocation(self.elasticVelShader.glid, "sigmayyTex"), sigmayy_texture_unit_number); 
+    glUniform1i(glGetUniformLocation(self.elasticVelShader.glid, "sigmayzTex"), sigmayz_texture_unit_number);
+    glUniform1i(glGetUniformLocation(self.elasticVelShader.glid, "sigmazzTex"), sigmazz_texture_unit_number);       
+    glUniform1i(glGetUniformLocation(self.elasticVelShader.glid, "rhoTex"), rho_texture_unit_number); 
+    glUniform1i(glGetUniformLocation(self.elasticVelShader.glid, "fxTex"), fx_texture_unit_number); 
+    glUniform1i(glGetUniformLocation(self.elasticVelShader.glid, "fyTex"), fy_texture_unit_number); 
+    glUniform1i(glGetUniformLocation(self.elasticVelShader.glid, "fzTex"), fz_texture_unit_number);
+    glUniform1i(glGetUniformLocation(self.elasticVelShader.glid, "surfaceTex"), surface_texture_unit_number);
+    
     glUniform1f(glGetUniformLocation(self.elasticVelShader.glid, "dx"), self.sim_params.dxyz[0]);
     glUniform1f(glGetUniformLocation(self.elasticVelShader.glid, "dy"), self.sim_params.dxyz[1]); 
     glUniform1f(glGetUniformLocation(self.elasticVelShader.glid, "dz"), self.sim_params.dxyz[2]);     
@@ -42,8 +43,6 @@ class simulation_step:
     glUniform1f(glGetUniformLocation(self.elasticVelShader.glid, "ox"), 1.0/self.sim_params.sim_size[0]); 
     glUniform1f(glGetUniformLocation(self.elasticVelShader.glid, "oy"), 1.0/self.sim_params.sim_size[1]); 
     glUniform1f(glGetUniformLocation(self.elasticVelShader.glid, "oz"), 1.0/self.sim_params.sim_size[2]);
-
-    glUniform1f(glGetUniformLocation(self.elasticVelShader.glid, "surface"), self.sim_params.surface);
     
     glUniform1i(glGetUniformLocation(self.elasticVelShader.glid, "layer"), -1); 
     
@@ -61,12 +60,13 @@ class simulation_step:
 
     glUseProgram(self.elasticSigmaShader.glid)
     
-    glUniform1i(glGetUniformLocation(self.elasticSigmaShader.glid, "velxTex"), 0); 
-    glUniform1i(glGetUniformLocation(self.elasticSigmaShader.glid, "velyTex"), 1);
-    glUniform1i(glGetUniformLocation(self.elasticSigmaShader.glid, "velzTex"), 2); 
-    glUniform1i(glGetUniformLocation(self.elasticSigmaShader.glid, "lamTex"), 10);      
-    glUniform1i(glGetUniformLocation(self.elasticSigmaShader.glid, "muTex"), 11);
-
+    glUniform1i(glGetUniformLocation(self.elasticSigmaShader.glid, "velxTex"), velx_texture_unit_number); 
+    glUniform1i(glGetUniformLocation(self.elasticSigmaShader.glid, "velyTex"), vely_texture_unit_number);
+    glUniform1i(glGetUniformLocation(self.elasticSigmaShader.glid, "velzTex"), velz_texture_unit_number); 
+    glUniform1i(glGetUniformLocation(self.elasticSigmaShader.glid, "lamTex"), lam_texture_unit_number);      
+    glUniform1i(glGetUniformLocation(self.elasticSigmaShader.glid, "muTex"), mu_texture_unit_number);
+    glUniform1i(glGetUniformLocation(self.elasticSigmaShader.glid, "surfaceTex"), surface_texture_unit_number);
+    
     glUniform1f(glGetUniformLocation(self.elasticSigmaShader.glid, "dx"), self.sim_params.dxyz[0]);
     glUniform1f(glGetUniformLocation(self.elasticSigmaShader.glid, "dy"), self.sim_params.dxyz[1]); 
     glUniform1f(glGetUniformLocation(self.elasticSigmaShader.glid, "dz"), self.sim_params.dxyz[2]);     
@@ -74,9 +74,7 @@ class simulation_step:
     glUniform1f(glGetUniformLocation(self.elasticSigmaShader.glid, "ox"), 1.0/self.sim_params.sim_size[0]); 
     glUniform1f(glGetUniformLocation(self.elasticSigmaShader.glid, "oy"), 1.0/self.sim_params.sim_size[1]); 
     glUniform1f(glGetUniformLocation(self.elasticSigmaShader.glid, "oz"), 1.0/self.sim_params.sim_size[2]);
-    glUniform1i(glGetUniformLocation(self.elasticSigmaShader.glid, "layer"), -1); 
-
-    glUniform1f(glGetUniformLocation(self.elasticSigmaShader.glid, "surface"), self.sim_params.surface);    
+    glUniform1i(glGetUniformLocation(self.elasticSigmaShader.glid, "layer"), -1);   
     
     # triangle position buffer
     position = np.array(((-1.0, 1.0, 0.0, 1.0), (-1.0, -1.0, 0.0, 0.0), (1.0, -1.0, 1.0, 0.0), (-1.0, 1.0, 0.0, 1.0), (1.0, -1.0, 1.0, 0.0), (1.0, 1.0, 1.0, 1.0)), 'f')
@@ -121,9 +119,9 @@ class simulation_step:
     glBlendFunc(GL_ONE, GL_ONE);
        
     #glFramebufferTexture3D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_3D, self.velTexId[dst], 0, 0); 
-    glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, self.sim_memory.velxTexId, 0);
-    glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, self.sim_memory.velyTexId, 0);  
-    glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, self.sim_memory.velzTexId, 0);      
+    glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, self.wave_memory.velxTexId, 0);
+    glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, self.wave_memory.velyTexId, 0);  
+    glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, self.wave_memory.velzTexId, 0);      
     drawbuffers=[GL_COLOR_ATTACHMENT0,GL_COLOR_ATTACHMENT1,GL_COLOR_ATTACHMENT2]
     glDrawBuffers(drawbuffers);
     
@@ -154,12 +152,12 @@ class simulation_step:
     
     #glBindFramebuffer(GL_FRAMEBUFFER, self.frameBuffer);    
     #glFramebufferTexture3D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_3D, self.velTexId[dst], 0, 0); 
-    glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, self.sim_memory.sigmaxxTexId, 0);
-    glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, self.sim_memory.sigmaxyTexId, 0);  
-    glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, self.sim_memory.sigmaxzTexId, 0);
-    glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT3, self.sim_memory.sigmayyTexId, 0);
-    glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT4, self.sim_memory.sigmayzTexId, 0);  
-    glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT5, self.sim_memory.sigmazzTexId, 0);      
+    glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, self.wave_memory.sigmaxxTexId, 0);
+    glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, self.wave_memory.sigmaxyTexId, 0);  
+    glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, self.wave_memory.sigmaxzTexId, 0);
+    glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT3, self.wave_memory.sigmayyTexId, 0);
+    glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT4, self.wave_memory.sigmayzTexId, 0);  
+    glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT5, self.wave_memory.sigmazzTexId, 0);      
     drawbuffers=[GL_COLOR_ATTACHMENT0,GL_COLOR_ATTACHMENT1,GL_COLOR_ATTACHMENT2,GL_COLOR_ATTACHMENT3,GL_COLOR_ATTACHMENT4,GL_COLOR_ATTACHMENT5]
     glDrawBuffers(drawbuffers);
     

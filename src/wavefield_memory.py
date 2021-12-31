@@ -6,13 +6,14 @@ from OpenGL.GL import *              # standard Python OpenGL wrapper
 
 import numpy as np                  # all matrix manipulations & OpenGL args
 
-import simulation_params
+import src.simulation_params as simulation_params
+from src.opengl_helpers import *
 
-class simulation_memory:
+class wavefield_memory:
   def __init__(self, sim_params):
   
     self.sim_params = sim_params
-
+    
     #init textures
     self.velx = np.zeros((self.sim_params.sim_size[2], self.sim_params.sim_size[1], self.sim_params.sim_size[0]), dtype='float32')
     self.vely = np.zeros((self.sim_params.sim_size[2], self.sim_params.sim_size[1], self.sim_params.sim_size[0]), dtype='float32')
@@ -24,9 +25,9 @@ class simulation_memory:
     self.sigmaxy = np.zeros((self.sim_params.sim_size[2], self.sim_params.sim_size[1], self.sim_params.sim_size[0]), dtype='float32')    
     self.sigmaxz = np.zeros((self.sim_params.sim_size[2], self.sim_params.sim_size[1], self.sim_params.sim_size[0]), dtype='float32')
     self.sigmayz = np.zeros((self.sim_params.sim_size[2], self.sim_params.sim_size[1], self.sim_params.sim_size[0]), dtype='float32')
-    
+            
     self.velxTexId = glGenTextures(1)   
-    glActiveTexture(GL_TEXTURE0)
+    glActiveTexture(velx_texture_unit)
     glBindTexture(GL_TEXTURE_3D, self.velxTexId);
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); 
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -37,7 +38,7 @@ class simulation_memory:
     glTexImage3D(GL_TEXTURE_3D, 0, GL_R32F, self.sim_params.sim_size[0], self.sim_params.sim_size[1], self.sim_params.sim_size[2], 0, GL_RED, GL_FLOAT, self.velx);
 
     self.velyTexId = glGenTextures(1)
-    glActiveTexture(GL_TEXTURE1)    
+    glActiveTexture(vely_texture_unit)    
     glBindTexture(GL_TEXTURE_3D, self.velyTexId);
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); 
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -49,7 +50,7 @@ class simulation_memory:
 
 
     self.velzTexId = glGenTextures(1)
-    glActiveTexture(GL_TEXTURE2)    
+    glActiveTexture(velz_texture_unit)    
     glBindTexture(GL_TEXTURE_3D, self.velzTexId);
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); 
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -61,7 +62,7 @@ class simulation_memory:
 
     
     self.sigmaxxTexId = glGenTextures(1)
-    glActiveTexture(GL_TEXTURE3)    
+    glActiveTexture(sigmaxx_texture_unit)    
     glBindTexture(GL_TEXTURE_3D, self.sigmaxxTexId);
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); 
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -73,7 +74,7 @@ class simulation_memory:
 
 
     self.sigmaxyTexId = glGenTextures(1)
-    glActiveTexture(GL_TEXTURE4)    
+    glActiveTexture(sigmaxy_texture_unit)    
     glBindTexture(GL_TEXTURE_3D, self.sigmaxyTexId);
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); 
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -85,7 +86,7 @@ class simulation_memory:
 
 
     self.sigmaxzTexId = glGenTextures(1)
-    glActiveTexture(GL_TEXTURE5)    
+    glActiveTexture(sigmaxz_texture_unit)    
     glBindTexture(GL_TEXTURE_3D, self.sigmaxzTexId);
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); 
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -97,7 +98,7 @@ class simulation_memory:
 
       
     self.sigmayyTexId = glGenTextures(1)
-    glActiveTexture(GL_TEXTURE6)    
+    glActiveTexture(sigmayy_texture_unit)    
     glBindTexture(GL_TEXTURE_3D, self.sigmayyTexId);
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); 
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -109,7 +110,7 @@ class simulation_memory:
 
 
     self.sigmayzTexId = glGenTextures(1)
-    glActiveTexture(GL_TEXTURE7)    
+    glActiveTexture(sigmayz_texture_unit)    
     glBindTexture(GL_TEXTURE_3D, self.sigmayzTexId);
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); 
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -121,7 +122,7 @@ class simulation_memory:
 
 
     self.sigmazzTexId = glGenTextures(1)
-    glActiveTexture(GL_TEXTURE8)    
+    glActiveTexture(sigmazz_texture_unit)    
     glBindTexture(GL_TEXTURE_3D, self.sigmazzTexId);
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); 
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -130,7 +131,7 @@ class simulation_memory:
     glTexParameteri(GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, GL_MIRRORED_REPEAT);
     #si inicializo con un buffer de diferente tamaño, la cosa no anda,no se porque
     glTexImage3D(GL_TEXTURE_3D, 0, GL_R32F, self.sim_params.sim_size[0], self.sim_params.sim_size[1], self.sim_params.sim_size[2], 0, GL_RED, GL_FLOAT, self.sigmazz);
-     
+         
   def reset(self):
   
     self.velx.fill(0)
@@ -145,22 +146,23 @@ class simulation_memory:
     self.sigmayz.fill(0)
     
     #v
-    glActiveTexture(GL_TEXTURE0);
+    glActiveTexture(velx_texture_unit);
     glTexSubImage3D(GL_TEXTURE_3D, 0, 0, 0, 0, self.sim_params.sim_size[0], self.sim_params.sim_size[1], self.sim_params.sim_size[2], GL_RED, GL_FLOAT, self.velx);
-    glActiveTexture(GL_TEXTURE1);
+    glActiveTexture(vely_texture_unit);
     glTexSubImage3D(GL_TEXTURE_3D, 0, 0, 0, 0, self.sim_params.sim_size[0], self.sim_params.sim_size[1], self.sim_params.sim_size[2], GL_RED, GL_FLOAT, self.vely);
-    glActiveTexture(GL_TEXTURE2);
+    glActiveTexture(velz_texture_unit);
     glTexSubImage3D(GL_TEXTURE_3D, 0, 0, 0, 0, self.sim_params.sim_size[0], self.sim_params.sim_size[1], self.sim_params.sim_size[2], GL_RED, GL_FLOAT, self.velz);
     #sigma
-    glActiveTexture(GL_TEXTURE3);
+    glActiveTexture(sigmaxx_texture_unit);
     glTexSubImage3D(GL_TEXTURE_3D, 0, 0, 0, 0, self.sim_params.sim_size[0], self.sim_params.sim_size[1], self.sim_params.sim_size[2], GL_RED, GL_FLOAT, self.sigmaxx);
-    glActiveTexture(GL_TEXTURE4);
+    glActiveTexture(sigmaxy_texture_unit);
     glTexSubImage3D(GL_TEXTURE_3D, 0, 0, 0, 0, self.sim_params.sim_size[0], self.sim_params.sim_size[1], self.sim_params.sim_size[2], GL_RED, GL_FLOAT, self.sigmaxy);
-    glActiveTexture(GL_TEXTURE5);    
+    glActiveTexture(sigmaxz_texture_unit);    
     glTexSubImage3D(GL_TEXTURE_3D, 0, 0, 0, 0, self.sim_params.sim_size[0], self.sim_params.sim_size[1], self.sim_params.sim_size[2], GL_RED, GL_FLOAT, self.sigmaxz);
-    glActiveTexture(GL_TEXTURE6);
+    glActiveTexture(sigmayy_texture_unit);
     glTexSubImage3D(GL_TEXTURE_3D, 0, 0, 0, 0, self.sim_params.sim_size[0], self.sim_params.sim_size[1], self.sim_params.sim_size[2], GL_RED, GL_FLOAT, self.sigmayy);
-    glActiveTexture(GL_TEXTURE7);
+    glActiveTexture(sigmayz_texture_unit);
     glTexSubImage3D(GL_TEXTURE_3D, 0, 0, 0, 0, self.sim_params.sim_size[0], self.sim_params.sim_size[1], self.sim_params.sim_size[2], GL_RED, GL_FLOAT, self.sigmayz);
-    glActiveTexture(GL_TEXTURE8);
+    glActiveTexture(sigmazz_texture_unit);
     glTexSubImage3D(GL_TEXTURE_3D, 0, 0, 0, 0, self.sim_params.sim_size[0], self.sim_params.sim_size[1], self.sim_params.sim_size[2], GL_RED, GL_FLOAT, self.sigmazz);
+    

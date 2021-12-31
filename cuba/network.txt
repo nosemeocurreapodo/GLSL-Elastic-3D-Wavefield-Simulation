@@ -1,0 +1,88 @@
+#network file organization:
+# name: station_name
+# loc: lat long altitude (km)
+# ntrace: north component file (absolute path to file or folder) (in any format that obspy supports)
+# etrace: east component file path
+# ztrace: down component file path
+# nresp: north component responce file (absolute path) (supported formats: .resp files or ISOLA's .pz files)
+# eresp: east component responce file (absolute path)
+# zresp: down component responce file (absolute path)
+
+name: CHIV
+
+loc: 19.9763 -76.4147 0.020  
+
+ntrace: C:\Emanuel\GLSL-Elastic-3D-Wavefield-Simulation\cuba\data_SAC\CHIVn.sac
+etrace: C:\Emanuel\GLSL-Elastic-3D-Wavefield-Simulation\cuba\data_SAC\CHIVe.sac
+ztrace: C:\Emanuel\GLSL-Elastic-3D-Wavefield-Simulation\cuba\data_SAC\CHIVz.sac 
+nresp:  C:\Emanuel\GLSL-Elastic-3D-Wavefield-Simulation\cuba\pzfiles\CHIVn.pz
+eresp:  C:\Emanuel\GLSL-Elastic-3D-Wavefield-Simulation\cuba\pzfiles\CHIVe.pz
+zresp:  C:\Emanuel\GLSL-Elastic-3D-Wavefield-Simulation\cuba\pzfiles\CHIVz.pz                                                
+
+name: RCC
+loc:  19.99420  -75.69580  0.01 
+
+ntrace: C:\Emanuel\GLSL-Elastic-3D-Wavefield-Simulation\cuba\data_SAC\RCCn.sac
+etrace: C:\Emanuel\GLSL-Elastic-3D-Wavefield-Simulation\cuba\data_SAC\RCCe.sac
+ztrace: C:\Emanuel\GLSL-Elastic-3D-Wavefield-Simulation\cuba\data_SAC\RCCz.sac 
+nresp: C:\Emanuel\GLSL-Elastic-3D-Wavefield-Simulation\cuba\pzfiles\RCCn.pz
+eresp: C:\Emanuel\GLSL-Elastic-3D-Wavefield-Simulation\cuba\pzfiles\RCCe.pz
+zresp: C:\Emanuel\GLSL-Elastic-3D-Wavefield-Simulation\cuba\pzfiles\RCCz.pz  
+                                                  
+name: LMGC
+loc:  20.06400  -77.00500  0.167   
+ntrace: C:\Emanuel\GLSL-Elastic-3D-Wavefield-Simulation\cuba\data_SAC\LMGCn.sac
+etrace: C:\Emanuel\GLSL-Elastic-3D-Wavefield-Simulation\cuba\data_SAC\LMGCe.sac
+ztrace: C:\Emanuel\GLSL-Elastic-3D-Wavefield-Simulation\cuba\data_SAC\LMGCz.sac 
+nresp: C:\Emanuel\GLSL-Elastic-3D-Wavefield-Simulation\cuba\pzfiles\LMGCn.pz
+eresp: C:\Emanuel\GLSL-Elastic-3D-Wavefield-Simulation\cuba\pzfiles\LMGCe.pz
+zresp: C:\Emanuel\GLSL-Elastic-3D-Wavefield-Simulation\cuba\pzfiles\LMGCz.pz                                                                                                    
+
+
+name: GTBY
+loc:  19.92681  -75.11081  0.0792
+
+ntrace: C:\Emanuel\GLSL-Elastic-3D-Wavefield-Simulation\cuba\data_SAC\GTBYn.sac
+etrace: C:\Emanuel\GLSL-Elastic-3D-Wavefield-Simulation\cuba\data_SAC\GTBYe.sac
+ztrace: C:\Emanuel\GLSL-Elastic-3D-Wavefield-Simulation\cuba\data_SAC\GTBYz.sac
+nresp:  C:\Emanuel\GLSL-Elastic-3D-Wavefield-Simulation\cuba\pzfiles\GTBYn.pz
+eresp: C:\Emanuel\GLSL-Elastic-3D-Wavefield-Simulation\cuba\pzfiles\GTBYe.pz
+zresp: C:\Emanuel\GLSL-Elastic-3D-Wavefield-Simulation\cuba\pzfiles\GTBYz.pz    
+
+name: MASC
+loc:  20.17500  -74.23100  0.350 
+
+ntrace: C:\Emanuel\GLSL-Elastic-3D-Wavefield-Simulation\cuba\data_SAC\MASCn.sac
+etrace: C:\Emanuel\GLSL-Elastic-3D-Wavefield-Simulation\cuba\data_SAC\MASCe.sac
+ztrace: C:\Emanuel\GLSL-Elastic-3D-Wavefield-Simulation\cuba\data_SAC\MASCz.sac 
+nresp: C:\Emanuel\GLSL-Elastic-3D-Wavefield-Simulation\cuba\pzfiles\MASCn.pz
+eresp: C:\Emanuel\GLSL-Elastic-3D-Wavefield-Simulation\cuba\pzfiles\MASCe.pz
+zresp: C:\Emanuel\GLSL-Elastic-3D-Wavefield-Simulation\cuba\pzfiles\MASCz.pz 
+ 
+name: CCCC
+loc:  21.1934  -77.4173  0.08955
+
+ntrace: C:\Emanuel\GLSL-Elastic-3D-Wavefield-Simulation\cuba\data_SAC\CCCCn.sac
+etrace: C:\Emanuel\GLSL-Elastic-3D-Wavefield-Simulation\cuba\data_SAC\CCCCe.sac
+ztrace: C:\Emanuel\GLSL-Elastic-3D-Wavefield-Simulation\cuba\data_SAC\CCCCz.sac
+nresp: C:\Emanuel\GLSL-Elastic-3D-Wavefield-Simulation\cuba\pzfiles\CCCCn.pz
+eresp: C:\Emanuel\GLSL-Elastic-3D-Wavefield-Simulation\cuba\pzfiles\CCCCe.pz
+zresp: C:\Emanuel\GLSL-Elastic-3D-Wavefield-Simulation\cuba\pzfiles\CCCCz.pz  
+
+name: MTDJ
+loc:  18.22606  -77.53453  0.925
+ntrace: C:\Emanuel\GLSL-Elastic-3D-Wavefield-Simulation\cuba\data_SAC\MTDJn.sac
+etrace: C:\Emanuel\GLSL-Elastic-3D-Wavefield-Simulation\cuba\data_SAC\MTDJe.sac
+ztrace: C:\Emanuel\GLSL-Elastic-3D-Wavefield-Simulation\cuba\data_SAC\MTDJz.sac
+nresp: C:\Emanuel\GLSL-Elastic-3D-Wavefield-Simulation\cuba\pzfiles\MTDJn.pz
+eresp: C:\Emanuel\GLSL-Elastic-3D-Wavefield-Simulation\cuba\pzfiles\MTDJe.pz
+zresp: C:\Emanuel\GLSL-Elastic-3D-Wavefield-Simulation\cuba\pzfiles\MTDJz.pz  
+ 
+name: LGNH
+loc: 18.511000 -72.605800 0.062    
+ntrace: C:\Emanuel\GLSL-Elastic-3D-Wavefield-Simulation\cuba\data_SAC\LGNHn.sac
+etrace: C:\Emanuel\GLSL-Elastic-3D-Wavefield-Simulation\cuba\data_SAC\LGNHe.sac
+ztrace: C:\Emanuel\GLSL-Elastic-3D-Wavefield-Simulation\cuba\data_SAC\LGNHz.sac
+nresp: C:\Emanuel\GLSL-Elastic-3D-Wavefield-Simulation\cuba\pzfiles\LGNHn.pz
+eresp: C:\Emanuel\GLSL-Elastic-3D-Wavefield-Simulation\cuba\pzfiles\LGNHe.pz
+zresp: C:\Emanuel\GLSL-Elastic-3D-Wavefield-Simulation\cuba\pzfiles\LGNHz.pz  

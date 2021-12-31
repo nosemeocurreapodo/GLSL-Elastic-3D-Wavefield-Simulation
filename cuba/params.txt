@@ -1,0 +1,7 @@
+#params data:
+
+#maximum frequency the simulation allows
+max_freq: 0.06
+
+#medium size (usefull for medium inversion)
+med_size: 1 1 128

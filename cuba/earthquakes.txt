@@ -1,0 +1,29 @@
+#earthquake data:
+#earthquake: year month day hour minute seconds
+#loc: lat long depth(km)
+#peak_freq: peak_freq (hertz)
+#mt: mxx myy mzz mxy mxz myz
+#isDC: True or False
+
+#example
+#earthquake:
+#time: 2016 1 17 8 30 25.08
+#loc: 19.749 -76.09 7.0
+#peak_freq: 0.03
+#mt: -2.3717535729395712e+14 -4.3148834231687064e+16 4.338600958898102e+16 -3.393454996110781e+15 -7.79314042168291e+14 4.607153448370924e+15
+
+time:  2016  1  17  8  30  23.0 
+loc:  19.72  -76.097  10.0
+peak_freq: 0.02
+mt:  1e+16 1e+16 1e+16 1e+16 1e+16 1e+16
+isDC: True
+
+#time:  2016  1  17  8  30  2.63289430e+01 
+#loc:  1.98217557e+01  -7.61339077e+01  6.58580687e+00 
+#peak_freq: 3.00000000e-02 
+#mt:  0.00000000e+00  -3.85757055e+16  3.85757055e+16  -4.76272769e+15  -5.69659037e+15  7.03334280e+15 
+#isDC: True
+
+
+
+
