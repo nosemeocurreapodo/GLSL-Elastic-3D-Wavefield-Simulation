@@ -1,8 +1,5 @@
 # GLSL-Elastic-3D-Wavefield-Simulation
 
-Tu espacio de almacenamiento está casi lleno (92 %). … 
-Pronto no podrás subir archivos nuevos a Drive ni enviar ni recibir correos electrónicos en Gmail.Más información
-
 HOW TO INSTALL
 
 #For linux:
